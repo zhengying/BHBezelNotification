@@ -17,7 +17,7 @@ public extension Array where Element : AnyObject {
     /// - Parameter element: The object to remove
     /// - Returns: The removed object, if it was in the array
     @discardableResult
-    public mutating func remove(_ element: Element) -> Element? {
+    mutating func remove(_ element: Element) -> Element? {
         if let foundIndex = self.index(of: element) {
             return remove(at: foundIndex)
         }
@@ -31,7 +31,7 @@ public extension Array where Element : AnyObject {
     ///
     /// - Parameter element: The object whose index to find
     /// - Returns: The index of the first instance of `element`, or `nil` if it's not in this array
-    public func index(of element: Element) -> Int? {
-        return index(where: { $0 === element })
+    func index(of element: Element) -> Int? {
+        return firstIndex(where: { $0 === element })
     }
 }

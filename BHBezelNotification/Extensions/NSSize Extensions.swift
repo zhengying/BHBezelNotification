@@ -48,6 +48,8 @@ extension NSSize {
             else {
                 self.init(scaling: original, proportionallyToFitWidth: parent.width)
             }
+        @unknown default:
+            fatalError()
         }
     }
     
@@ -74,29 +76,29 @@ extension NSSize {
 
 
 public extension NSSize {
-    public static func *(lhs: Double, rhs: NSSize) -> NSSize {
+    static func *(lhs: Double, rhs: NSSize) -> NSSize {
         return CGFloat(lhs) * rhs
     }
     
     
-    public static func *(lhs: NSSize, rhs: Double) -> NSSize {
+    static func *(lhs: NSSize, rhs: Double) -> NSSize {
         return lhs * CGFloat(rhs)
     }
     
     
-    public static func *(lhs: CGFloat, rhs: NSSize) -> NSSize {
+    static func *(lhs: CGFloat, rhs: NSSize) -> NSSize {
         return NSSize(width: lhs * rhs.width,
                       height: lhs * rhs.height)
     }
     
     
-    public static func *(lhs: NSSize, rhs: CGFloat) -> NSSize {
+    static func *(lhs: NSSize, rhs: CGFloat) -> NSSize {
         return NSSize(width: lhs.width * rhs,
                       height: lhs.height * rhs)
     }
     
     
-    public static func *(lhs: NSSize, rhs: NSSize) -> NSSize {
+    static func *(lhs: NSSize, rhs: NSSize) -> NSSize {
         return NSSize(width: lhs.width * rhs.width,
                       height: lhs.height * rhs.height)
     }
