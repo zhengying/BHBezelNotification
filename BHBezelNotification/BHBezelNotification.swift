@@ -162,7 +162,8 @@ public struct BezelParameters {
     public static let defaultFadeOutAnimationDuration: TimeInterval = 0.25
     
     public static let defaultCornerRadius: CGFloat = 18
-    public static let defaultBackgroundTint = NSColor(calibratedWhite: 0, alpha: 1)
+
+    public static let defaultBackgroundTint = NSColor(calibratedRed: 0.180, green: 0.180, blue: 0.180, alpha: 1)
     public static let defaultMessageLabelBaselineOffsetFromBottomOfBezel: CGFloat = 20
     public static let defaultMessageLabelFontSize: CGFloat = 18
     public static let defaultMessageLabelFont = NSFont.systemFont(ofSize: defaultMessageLabelFontSize)
@@ -476,12 +477,18 @@ extension BezelSize {
 /// The semantic location of a bezel notification
 public enum BezelLocation {
     case normal
+    case upper
+    case center
 }
 extension BezelLocation {
     public func bezelWindowContentRect(atSize size: BezelSize) -> NSRect {
         switch self {
         case .normal:
             return screen?.lowerCenterRect(ofSize: size.cgSize) ?? NSRect(origin: NSPoint(x: 48, y: 48), size: size.cgSize)
+        case .upper:
+            return screen?.upperCenterRect(ofSize: size.cgSize) ?? NSRect(origin: NSPoint(x: 48, y: 48), size: size.cgSize)
+        case .center:
+            return screen?.screenCenterRect(ofSize: size.cgSize) ?? NSRect(origin: NSPoint(x: 48, y: 48), size: size.cgSize)
         }
     }
     
@@ -489,6 +496,8 @@ extension BezelLocation {
     public var screen: NSScreen? {
         switch self {
         case .normal:
+            return .main ?? NSScreen.screens.first
+        default:
             return .main ?? NSScreen.screens.first
         }
     }
@@ -499,10 +508,23 @@ extension BezelLocation {
 private extension NSScreen {
     
     private static let lowerCenterRectBottomOffset: CGFloat = 140
+    private static let upperCenterRectBottomOffset: CGFloat = 140
     
     func lowerCenterRect(ofSize size: NSSize) -> NSRect {
         return NSRect(origin: NSPoint(x: self.frame.midX - (size.width / 2),
                                       y: self.frame.minY + NSScreen.lowerCenterRectBottomOffset),
+                      size: size)
+    }
+    
+    func upperCenterRect(ofSize size: NSSize) -> NSRect {
+        return NSRect(origin: NSPoint(x: self.frame.midX - (size.width / 2),
+                                      y: self.frame.maxY - NSScreen.upperCenterRectBottomOffset - size.height) ,
+                      size: size)
+    }
+    
+    func screenCenterRect(ofSize size: NSSize) -> NSRect {
+        return NSRect(origin: NSPoint(x: self.frame.midX - (size.width / 2),
+                                      y: (self.frame.maxY - size.height) / 2) ,
                       size: size)
     }
 }
